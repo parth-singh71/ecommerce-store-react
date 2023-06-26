@@ -1,0 +1,20 @@
+.root_layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.footer_layout {
+  // display: block;
+  // background-color: white;
+  height: 50px;
+  text-align: center;
+  padding: 10px;
+  margin-top: auto;
+  // position: fixed;
+  // width: 100%;
+  // bottom: 0;
+  // right: 0;
+  // left: 0;
+//   flex: 0 0 50px; /*or just height:50px;*/
+}
