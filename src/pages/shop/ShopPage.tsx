@@ -17,6 +17,7 @@ import {
   getWishlistItems,
 } from "../../utils/slices/wishlistSlice.js";
 import { ExtendedProductWishlist } from "../../models/productWishlist.js";
+import useLogout from "../../utils/hooks/useLogout.js";
 
 const getWishlistProductIds = (wishlishProducts: ExtendedProductWishlist[]) => {
   // eslint-disable-next-line prefer-const
@@ -25,8 +26,6 @@ const getWishlistProductIds = (wishlishProducts: ExtendedProductWishlist[]) => {
     const wishlishProduct = wishlishProducts[i];
     res.push(wishlishProduct.product.id);
   }
-  console.log("res is", res);
-
   return res;
 };
 
@@ -36,6 +35,7 @@ const ShopPage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const wishlishProducts = useSelector(getWishlistItems);
   const [wishlistProductIds, setWishlistProductIds] = useState<number[]>([]);
+  const logout = useLogout();
   useEffect(() => {
     const arr: number[] = getWishlistProductIds(wishlishProducts);
     setWishlistProductIds(arr);
@@ -44,7 +44,8 @@ const ShopPage = () => {
     if (authData.token) {
       dispatch(getAllProducts(authData.token));
     } else {
-      //TODO: LOGOUT USER
+      alert("Something went wrong, logging you out");
+      logout(authData.token);
     }
     if (wishlishProducts.length == 0) {
       if (authData.token && authData.userId) {
@@ -55,7 +56,8 @@ const ShopPage = () => {
           })
         );
       } else {
-        //TODO: LOGOUT USER
+        alert("Something went wrong, logging you out");
+        logout(authData.token);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

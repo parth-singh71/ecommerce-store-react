@@ -8,8 +8,15 @@ import {
 } from "../../../utils/slices/userSlice";
 import { useNavigate } from "react-router-dom";
 import constants from "../../../utils/constants";
-import { Paper, Typography, Container } from "@mui/material";
-import TextField from "../../../components/text-field/TextField";
+import {
+  Paper,
+  Typography,
+  Container,
+  Card,
+  Stack,
+  CardContent,
+  TextField,
+} from "@mui/material";
 import Button from "../../../components/button/Button";
 
 const SignupPage = () => {
@@ -31,8 +38,6 @@ const SignupPage = () => {
   const onSignupPressed = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (username && email && password) {
-      // signup api call here
-      console.log(username, email, password);
       const authData = await PiousApis.signupUser(username, email, password);
       if (authData) {
         const { token, user_id } = authData;
@@ -41,7 +46,6 @@ const SignupPage = () => {
         navigate(constants.kHomePage);
       }
     } else {
-      //TODO: NOTIFY USER TO ENTER USERNAME OR PASSWORD AND TRY AGAIN
       alert("Please enter username, email and password to continue");
       setErrorData({
         ...errorData,
@@ -52,38 +56,82 @@ const SignupPage = () => {
   };
 
   return (
-    <Container>
-      <Paper
-        className="signup_container"
+    <Container
+      sx={{
+        position: "fixed",
+        height: 1,
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+      }}
+    >
+      <Stack
         sx={{
-          borderRadius: 2,
+          height: 1,
         }}
       >
-        <form onSubmit={async (e) => await onSignupPressed(e)}>
-          <Typography variant="h4" component="h2">
-            Signup to a new account
-          </Typography>
-          <TextField
-            size="small"
-            type="text"
-            label="Username"
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <TextField
-            size="small"
-            type="email"
-            label="Email"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <TextField
-            size="small"
-            type="password"
-            label="Password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <Button type="submit">Sign up</Button>
-        </form>
-      </Paper>
+        <Card
+          className="signup_container"
+          sx={{
+            height: "min-content",
+            my: "auto",
+            minWidth: 275,
+            borderRadius: 2,
+            mx: { xs: 2, sm: 5, md: 25, xl: 30 },
+          }}
+        >
+          <CardContent
+            sx={{
+              py: 5,
+              px: 5,
+              "&:last-child": {
+                pb: 5,
+              },
+            }}
+          >
+            <form onSubmit={async (e) => await onSignupPressed(e)}>
+              <Typography
+                variant="h4"
+                component="h2"
+                sx={{ mb: 5, textAlign: "center" }}
+              >
+                Signup to a new account
+              </Typography>
+              <Stack>
+                <TextField
+                  label="Username"
+                  placeholder="Username"
+                  variant="outlined"
+                  size="small"
+                  type="text"
+                  sx={{ mb: 2 }}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+                <TextField
+                  label="Email"
+                  placeholder="Email"
+                  variant="outlined"
+                  size="small"
+                  type="email"
+                  sx={{ mb: 2 }}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <TextField
+                  label="Password"
+                  placeholder="Password"
+                  variant="outlined"
+                  size="small"
+                  type="password"
+                  sx={{ mb: 2 }}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </Stack>
+              <Button type="submit">Sign up</Button>
+            </form>
+          </CardContent>
+        </Card>
+      </Stack>
     </Container>
   );
 };

@@ -1,6 +1,7 @@
 const constants = {
   kAppName: "Pious Store",
   kAppTagline: "Your own mega store",
+  kAppDeveloper: "PiousApps",
   kApiBaseUrl: "http://localhost:8000/api/", //"http://192.168.29.65:8000/api/", // "http://localhost:8000/api/",
   kApiLogin: "auth/login/",
   kApiSignup: "auth/signup/",

@@ -10,11 +10,13 @@ import { useEffect } from "react";
 import { Stack, Typography } from "@mui/material";
 import { ExtendedProductWishlist } from "../../models/productWishlist";
 import WishlistItemCard from "../../components/wishlist-item-card/WishlistItemCard";
+import useLogout from "../../utils/hooks/useLogout";
 
 const WishlistPage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const authData = useSelector(getUserDetailsSelector);
   const wishlistItems = useSelector(getWishlistItems);
+  const logout = useLogout();
   useEffect(
     () => {
       if (wishlistItems.length == 0) {
@@ -26,8 +28,8 @@ const WishlistPage = () => {
             })
           );
         } else {
-          alert("something went wrong wishlistpage");
-          //TODO: LOGOUT USER
+          alert("Something went wrong, logging you out");
+          logout(authData.token);
         }
       }
     },

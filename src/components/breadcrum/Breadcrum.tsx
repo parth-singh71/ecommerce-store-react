@@ -8,7 +8,7 @@ const Breadcrum = ({ currentRoute }: { currentRoute: string }) => {
   const pathLen = pathElements.length;
   return (
     <Breadcrumbs
-      sx={{ pt: 1, px: 2, pb: 2, display: pathLen == 0 ? "none" : "block" }}
+      sx={{ pt: 1, px: 2, pb: 2, display: pathLen == 0 ? "block" : "block" }}
       separator={<NavigateNextIcon fontSize="small" />}
       aria-label="breadcrumb"
     >

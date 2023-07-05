@@ -17,6 +17,7 @@ import {
   getAllProductsInWishlist,
 } from "../../utils/slices/wishlistSlice";
 import { ExtendedProductWishlist } from "../../models/productWishlist";
+import useLogout from "../../utils/hooks/useLogout";
 
 type ProductCardType = {
   product: Product;
@@ -32,6 +33,7 @@ const ProductCard = ({
   const [liked, setLiked] = useState(wishlisted);
   const dispatch = useDispatch<AppDispatch>();
   const authData = useSelector(getUserDetailsSelector);
+  const logout = useLogout();
   useEffect(() => {
     setLiked(wishlisted);
   }, [wishlisted]);
@@ -101,7 +103,8 @@ const ProductCard = ({
                 );
                 setLiked(true);
               } else {
-                //TODO: LOGOUT USER
+                alert("Something went wrong, logging you out");
+                logout(authData.token);
               }
             }}
           >

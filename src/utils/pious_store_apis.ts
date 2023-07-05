@@ -77,7 +77,7 @@ class PiousApis {
     }
   };
 
-  static logoutUser = async (token: string): Promise<boolean | null> => {
+  static logoutUser = async (token?: string): Promise<boolean | null> => {
     try {
       const url = `${constants.kApiBaseUrl}${constants.kApiLogout}`;
 

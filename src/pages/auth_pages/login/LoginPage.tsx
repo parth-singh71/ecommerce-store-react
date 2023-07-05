@@ -8,8 +8,14 @@ import {
 } from "../../../utils/slices/userSlice";
 import { useNavigate } from "react-router-dom";
 import constants from "../../../utils/constants";
-import { Container, Paper, Typography } from "@mui/material";
-import TextField from "../../../components/text-field/TextField";
+import {
+  Card,
+  CardContent,
+  Container,
+  Typography,
+  TextField,
+  Stack,
+} from "@mui/material";
 import Button from "../../../components/button/Button";
 
 const LoginPage = () => {
@@ -30,8 +36,6 @@ const LoginPage = () => {
   const onLoginPressed = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (username && password) {
-      // login api call here
-      console.log(username, password);
       const authData = await PiousApis.loginUser(username, password);
       if (authData) {
         const { token, user_id } = authData;
@@ -40,7 +44,6 @@ const LoginPage = () => {
         navigate(constants.kHomePage);
       }
     } else {
-      //TODO: NOTIFY USER TO ENTER USERNAME OR PASSWORD AND TRY AGAIN
       alert("Please enter username, email and password to continue");
       setErrorData({
         ...errorData,
@@ -51,32 +54,73 @@ const LoginPage = () => {
   };
 
   return (
-    <Container>
-      <Paper
-        className="login_container"
+    <Container
+      sx={{
+        position: "fixed",
+        height: 1,
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+      }}
+    >
+      <Stack
         sx={{
-          borderRadius: 2,
+          height: 1,
         }}
       >
-        <form onSubmit={async (e) => await onLoginPressed(e)}>
-          <Typography variant="h4" component="h2">
-            Login to an existing account
-          </Typography>
-          <TextField
-            size="small"
-            type="text"
-            label="Username"
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <TextField
-            size="small"
-            type="password"
-            label="Password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <Button type="submit">Login</Button>
-        </form>
-      </Paper>
+        <Card
+          className="login_container"
+          sx={{
+            height: "min-content",
+            my: "auto",
+            minWidth: 275,
+            borderRadius: 2,
+            mx: { xs: 2, sm: 5, md: 25, xl: 30 },
+          }}
+        >
+          <CardContent
+            sx={{
+              py: 5,
+              px: 5,
+              "&:last-child": {
+                pb: 5,
+              },
+            }}
+          >
+            <form onSubmit={async (e) => await onLoginPressed(e)}>
+              <Typography
+                variant="h4"
+                component="h2"
+                sx={{ mb: 5, textAlign: "center" }}
+              >
+                Login to an existing account
+              </Typography>
+              <Stack>
+                <TextField
+                  label="Username"
+                  placeholder="Username"
+                  variant="outlined"
+                  size="small"
+                  type="text"
+                  sx={{ mb: 2 }}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+                <TextField
+                  label="Password"
+                  placeholder="Password"
+                  variant="outlined"
+                  size="small"
+                  type="password"
+                  sx={{ mb: 2 }}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </Stack>
+              <Button type="submit">Login</Button>
+            </form>
+          </CardContent>
+        </Card>
+      </Stack>
     </Container>
   );
 };

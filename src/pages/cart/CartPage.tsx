@@ -17,6 +17,7 @@ import {
   Typography,
 } from "@mui/material";
 import { ExtendedProductCart } from "../../models/productCart";
+import useLogout from "../../utils/hooks/useLogout";
 
 const getTotalPrice = (cartItems: ExtendedProductCart[]) => {
   let total = 0;
@@ -32,6 +33,7 @@ const CartPage = () => {
   const authData = useSelector(getUserDetailsSelector);
   const cartItems = useSelector(getCartItems);
   const [totalPrice, setTotalPrice] = useState(0);
+  const logout = useLogout();
   useEffect(() => {
     const total = getTotalPrice(cartItems);
     setTotalPrice(total);
@@ -46,8 +48,8 @@ const CartPage = () => {
           })
         );
       } else {
-        alert("something went wrong cartpage");
-        //TODO: LOGOUT USER
+        alert("Something went wrong, logging you out");
+        logout(authData.token);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

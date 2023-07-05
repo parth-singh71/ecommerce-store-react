@@ -130,7 +130,7 @@ const AddProductPage = () => {
                 variant="contained"
                 sx={{ mt: 1 }}
                 onClick={() => {
-                  console.log(productDetails);
+                  // console.log(productDetails);
                 }}
               >
                 Enlist Product

@@ -1,10 +1,11 @@
+import constants from "../../utils/constants";
 import "./styles.scss";
 
 const Footer = () => {
   return (
     <footer className="footer_layout">
-      <p>&copy; 2023 Pious Store All rights reserved.</p>
-      <p>Designed & developed by PiousApps</p>
+      <p>&copy; 2023 {constants.kAppName} All rights reserved.</p>
+      <p>Designed & developed by {constants.kAppDeveloper}</p>
     </footer>
   );
 };

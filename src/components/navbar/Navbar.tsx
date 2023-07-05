@@ -3,10 +3,6 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Typography from "@mui/material/Typography";
-import { useDispatch } from "react-redux";
-import { updateUser } from "../../utils/slices/userSlice";
-import Cookies from "js-cookie";
-import PiousApis from "../../utils/pious_store_apis";
 import {
   Box,
   Link as Link,
@@ -19,16 +15,13 @@ import {
   Theme,
 } from "@mui/material";
 import constants from "../../utils/constants";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import React, { ElementType, PropsWithChildren, useState } from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { updateProducts } from "../../utils/slices/productsSlice";
-import { updateCart } from "../../utils/slices/cartSlice";
+import useLogout from "../../utils/hooks/useLogout";
 
 const Navbar = (props: { token: string }) => {
   const { token } = props;
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -38,9 +31,7 @@ const Navbar = (props: { token: string }) => {
   const closePopOver = () => {
     setAnchorEl(null);
   };
-  // const theme = useTheme();
-  // const onlySmallScreen = theme.breakpoints.down("sm");
-  // console.log("onlySmallScreen", onlySmallScreen);
+  const logout = useLogout();
 
   return (
     <AppBar position="static">
@@ -48,7 +39,7 @@ const Navbar = (props: { token: string }) => {
         <CustomDrawer />
         <NavLink to={constants.kHomePage} sx={{ flexGrow: 1 }}>
           <Typography variant="h6" component="div">
-            Pious Store
+            {constants.kAppName}
           </Typography>
         </NavLink>
         <Box
@@ -118,18 +109,7 @@ const Navbar = (props: { token: string }) => {
           <Link
             component="button"
             underline="hover"
-            onClick={() => {
-              PiousApis.logoutUser(token).then((isLogoutSuccessful) => {
-                if (isLogoutSuccessful) {
-                  alert("Successfully logged out");
-                }
-                Cookies.remove("authdata");
-                dispatch(updateUser({}));
-                dispatch(updateProducts([]));
-                dispatch(updateCart([]));
-                navigate(constants.kHomePage);
-              });
-            }}
+            onClick={() => logout(token, true)}
           >
             <Typography sx={{ p: 2 }}>Logout</Typography>
           </Link>

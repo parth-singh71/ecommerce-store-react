@@ -16,10 +16,12 @@ import {
 } from "@mui/material";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import LocalMallIcon from "@mui/icons-material/LocalMall";
+import useLogout from "../../utils/hooks/useLogout";
 
 const ProfilePage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const userData = useSelector(getUserDetailsSelector);
+  const logout = useLogout();
   useEffect(() => {
     if (!userData.user) {
       if (userData.token && userData.userId) {
@@ -27,8 +29,8 @@ const ProfilePage = () => {
           getUserDetails({ token: userData.token, userId: userData.userId })
         );
       } else {
-        alert("something went wrong profilepage");
-        // TODO: LOGOUT USER
+        alert("Something went wrong, logging you out");
+        logout(userData.token);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
