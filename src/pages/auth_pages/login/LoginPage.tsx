@@ -4,8 +4,8 @@ import PiousApis from "../../../utils/pious_store_apis";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getTokenSelector,
-  updateToken,
-} from "../../../utils/slices/tokenSlice";
+  updateUserIdAndToken,
+} from "../../../utils/slices/userSlice";
 import { useNavigate } from "react-router-dom";
 import constants from "../../../utils/constants";
 import { Container, Paper, Typography } from "@mui/material";
@@ -32,10 +32,11 @@ const LoginPage = () => {
     if (username && password) {
       // login api call here
       console.log(username, password);
-      const tokenData = await PiousApis.loginUser(username, password);
-      if (tokenData) {
+      const authData = await PiousApis.loginUser(username, password);
+      if (authData) {
+        const { token, user_id } = authData;
         //save to global state
-        dispatch(updateToken(tokenData.token));
+        dispatch(updateUserIdAndToken({ token, userId: user_id }));
         navigate(constants.kHomePage);
       }
     } else {

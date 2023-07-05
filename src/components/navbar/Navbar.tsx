@@ -1,26 +1,29 @@
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-// import IconButton from "@mui/material/IconButton";
-// import MenuIcon from "@mui/icons-material/Menu";
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from "@mui/icons-material/Menu";
 import Typography from "@mui/material/Typography";
 import { useDispatch } from "react-redux";
-import { updateToken } from "../../utils/slices/tokenSlice";
+import { updateUser } from "../../utils/slices/userSlice";
 import Cookies from "js-cookie";
 import PiousApis from "../../utils/pious_store_apis";
 import {
-  IconButton,
+  Box,
   Link as Link,
-  Menu,
-  MenuItem,
+  List,
+  ListItem,
+  ListItemButton,
   Popover,
+  SwipeableDrawer,
   SxProps,
   Theme,
-  useTheme,
 } from "@mui/material";
 import constants from "../../utils/constants";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import React, { ElementType, PropsWithChildren, useState } from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { updateProducts } from "../../utils/slices/productsSlice";
+import { updateCart } from "../../utils/slices/cartSlice";
 
 const Navbar = (props: { token: string }) => {
   const { token } = props;
@@ -35,25 +38,39 @@ const Navbar = (props: { token: string }) => {
   const closePopOver = () => {
     setAnchorEl(null);
   };
-  const theme = useTheme();
-  const onlySmallScreen = theme.breakpoints.down("sm");
-  console.log("onlySmallScreen", onlySmallScreen);
+  // const theme = useTheme();
+  // const onlySmallScreen = theme.breakpoints.down("sm");
+  // console.log("onlySmallScreen", onlySmallScreen);
 
   return (
     <AppBar position="static">
       <Toolbar variant="dense">
-        {/* <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}><MenuIcon /></IconButton> */}
+        <CustomDrawer />
         <NavLink to={constants.kHomePage} sx={{ flexGrow: 1 }}>
           <Typography variant="h6" component="div">
             Pious Store
           </Typography>
         </NavLink>
-        <NavLink title="Home" to={constants.kHomePage} />
-        <NavLink title="About" to={constants.kAboutPage} />
-        <NavLink title="Shop" to={constants.kShopPage} />
-        <NavLink title="Cart" to={constants.kCartPage} />
-        <NavLink title="Wishlist" to={constants.kWishlistPage} />
-        <NavLink title="Profile" to={constants.kProfilePage} />
+        <Box
+          component="div"
+          sx={{
+            display: {
+              xs: "none",
+              sm: "none",
+              md: "flex",
+              lg: "flex",
+              xl: "flex",
+            },
+            textOverflow: "ellipsis",
+          }}
+        >
+          <NavLink title="Home" to={constants.kHomePage} />
+          <NavLink title="About" to={constants.kAboutPage} />
+          <NavLink title="Shop" to={constants.kShopPage} />
+          <NavLink title="Cart" to={constants.kCartPage} />
+          <NavLink title="Wishlist" to={constants.kWishlistPage} />
+          <NavLink title="Profile" to={constants.kProfilePage} />
+        </Box>
         <IconButton onClick={handleClick}>
           <MoreVertIcon style={{ color: "white" }} />
         </IconButton>
@@ -106,8 +123,10 @@ const Navbar = (props: { token: string }) => {
                 if (isLogoutSuccessful) {
                   alert("Successfully logged out");
                 }
-                Cookies.remove("token");
-                dispatch(updateToken(""));
+                Cookies.remove("authdata");
+                dispatch(updateUser({}));
+                dispatch(updateProducts([]));
+                dispatch(updateCart([]));
                 navigate(constants.kHomePage);
               });
             }}
@@ -136,7 +155,7 @@ type NavLinkPropsType = {
   isColorWhite?: boolean;
 };
 
-const NavLink = ({
+export const NavLink = ({
   className,
   title,
   to,
@@ -160,6 +179,94 @@ const NavLink = ({
     >
       {children ? children : <Typography sx={{ p: 2 }}>{title}</Typography>}
     </Link>
+  );
+};
+
+const CustomDrawer = () => {
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const handleClick = (status?: boolean) => {
+    if (status) {
+      setIsDrawerOpen(status);
+    } else {
+      setIsDrawerOpen(!isDrawerOpen);
+    }
+  };
+  const anchor = "left";
+  return (
+    <React.Fragment key={anchor}>
+      <IconButton
+        size="large"
+        edge="start"
+        color="inherit"
+        aria-label="menu"
+        sx={{ mr: 1, display: { sm: "block", md: "none" } }}
+        onClick={() => handleClick()}
+      >
+        <MenuIcon />
+      </IconButton>
+      <SwipeableDrawer
+        anchor={anchor}
+        open={isDrawerOpen}
+        onClose={() => handleClick(false)}
+        onOpen={() => handleClick(true)}
+      >
+        <List>
+          <CustomListItem
+            title="Home"
+            to={constants.kHomePage}
+            onClick={() => handleClick(false)}
+          />
+          <CustomListItem
+            title="About"
+            to={constants.kAboutPage}
+            onClick={() => handleClick(false)}
+          />
+          <CustomListItem
+            title="Shop"
+            to={constants.kShopPage}
+            onClick={() => handleClick(false)}
+          />
+          <CustomListItem
+            title="Cart"
+            to={constants.kCartPage}
+            onClick={() => handleClick(false)}
+          />
+          <CustomListItem
+            title="Wishlist"
+            to={constants.kWishlistPage}
+            onClick={() => handleClick(false)}
+          />
+          <CustomListItem
+            title="Profile"
+            to={constants.kProfilePage}
+            onClick={() => handleClick(false)}
+          />
+        </List>
+      </SwipeableDrawer>
+    </React.Fragment>
+  );
+};
+
+const CustomListItem = ({
+  title,
+  to,
+  onClick,
+}: {
+  title: string;
+  to: string;
+  onClick?: React.MouseEventHandler<HTMLDivElement> | undefined;
+}) => {
+  return (
+    <ListItem key={title} disablePadding>
+      <ListItemButton dense sx={{ my: 0, py: 0, px: 5 }} onClick={onClick}>
+        <NavLink
+          title={title}
+          to={to}
+          isColorWhite={false}
+          sx={{ my: 0, py: 0 }}
+        />
+      </ListItemButton>
+    </ListItem>
   );
 };
 

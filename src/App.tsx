@@ -2,15 +2,16 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { initialRoutes } from "./routes";
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
-import { updateToken } from "./utils/slices/tokenSlice";
+import { updateUserIdAndToken } from "./utils/slices/userSlice";
 
 const router = createBrowserRouter(initialRoutes);
 
 function App() {
-  const token = Cookies.get("token");
   const dispatch = useDispatch();
-  if (token) {
-    dispatch(updateToken(token));
+  const authData = Cookies.get("authdata");
+  if (authData) {
+    const { token, userId } = JSON.parse(authData);
+    dispatch(updateUserIdAndToken({ token, userId }));
   }
   return <RouterProvider router={router} />;
 }

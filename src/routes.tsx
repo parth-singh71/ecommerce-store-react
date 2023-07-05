@@ -8,6 +8,7 @@ import ShopPage from "./pages/shop/ShopPage";
 import ProfilePage from "./pages/profile/ProfilePage";
 import CartPage from "./pages/cart/CartPage";
 import WishlistPage from "./pages/wishlist/WishlistPage";
+import AddProductPage from "./pages/add_product/AddProductPage";
 
 export const initialRoutes = [
   // {
@@ -24,6 +25,7 @@ export const initialRoutes = [
       { path: constants.kProfilePage, element: <ProfilePage /> },
       { path: constants.kCartPage, element: <CartPage /> },
       { path: constants.kWishlistPage, element: <WishlistPage /> },
+      { path: constants.kAddProductPage, element: <AddProductPage /> },
     ],
   },
   { path: constants.kLoginPage, element: <LoginPage /> },

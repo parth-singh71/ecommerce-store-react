@@ -2,7 +2,7 @@ import "./styles.scss";
 import { useSelector } from "react-redux";
 import { HomePage } from "../../pages/home/HomePage";
 import StartPage from "../../pages/start/StartPage";
-import { getTokenSelector } from "../../utils/slices/tokenSlice";
+import { getTokenSelector } from "../../utils/slices/userSlice";
 
 const HomePageSelector = () => {
   const token = useSelector(getTokenSelector);
